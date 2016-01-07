@@ -21,11 +21,13 @@ public class ArrowView extends View {
     private float mAboveViewWidth;
     private int mAboveViewIndex;
     private Paint mTrianglePaint;
+    private int mOffset;
 
 
-    public ArrowView(Context context) {
+    public ArrowView(Context context, int offset) {
         super(context);
         init(context);
+        mOffset = 2*offset;
     }
 
     public ArrowView(Context context, AttributeSet attrs) {
@@ -79,10 +81,9 @@ public class ArrowView extends View {
 
         Path path = new Path();
 
-        int index = mAboveViewIndex % 3 + 1;
-        int offset = 16;
-        startPointX = (2*index - 1)* mAboveViewWidth / 2 + (index - 1) * offset;
-        startPointY = offset;
+        int index = mAboveViewIndex;
+        startPointX = (2 * index - 1)* (mAboveViewWidth / 2.0f) + (index - 1) * mOffset - TRIANGLE_BOTTOM_WIDTH / 2;
+        startPointY = 16;
         topPointX = startPointX + TRIANGLE_BOTTOM_WIDTH / 2;
         topPointY = startPointY - TRIANGLE_HEIGHT;
         endPointX = startPointX + TRIANGLE_BOTTOM_WIDTH;
@@ -93,12 +94,14 @@ public class ArrowView extends View {
         topPointY = DensityUtil.dip2px(getContext(), topPointY);
         endPointX = DensityUtil.dip2px(getContext(), endPointX);
         endPointY = DensityUtil.dip2px(getContext(), endPointY);
-
-                path.moveTo(startPointX, startPointY);
+        path.moveTo(startPointX, startPointY);
         path.lineTo(topPointX, topPointY);
         path.lineTo(endPointX, endPointY);
         path.close();
         canvas.drawPath(path, mTrianglePaint);
+        //mTrianglePaint.setColor(Color.RED);
+        canvas.drawPoint(DensityUtil.dip2px(getContext(), 50), 0, mTrianglePaint);
+        canvas.drawPoint(DensityUtil.dip2px(getContext(), 100), 0, mTrianglePaint);
 
         //canvas.drawLine(DensityUtil.dip2px(getContext(), mAboveViewWidth / 2.0f - TRIANGLE_BOTTOM_WIDTH / 2.0f), DensityUtil.dip2px(getContext(), 16), DensityUtil.dip2px(getContext(), mAboveViewWidth / 2.0f), 0, mTrianglePaint);
     }
